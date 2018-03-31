@@ -57,7 +57,8 @@ export default class Search extends Component {
     keyboardType: PropTypes.string,
     fontFamily: PropTypes.string,
     allDataOnEmptySearch: PropTypes.bool,
-    editable: PropTypes.bool
+    editable: PropTypes.bool,
+    borderRadius: PropTypes.number
   };
 
   static defaultProps = {
@@ -89,7 +90,8 @@ export default class Search extends Component {
     allDataOnEmptySearch: false,
     backCloseSize: 28,
     fontSize: 20,
-    editable: true
+    editable: true,
+    borderRadius: 0
   };
 
   constructor(props) {
@@ -141,6 +143,16 @@ export default class Search extends Component {
       this.setState({ top: new Animated.Value(INITIAL_TOP) });
       this._doHide();
     }
+  };
+
+  focus = () => {
+    if(this.textInput) {
+      this.textInput.focus();
+    }
+  };
+
+  setText = (input) => {
+    this.setState({input});
   };
 
   _doHide = () => {
@@ -242,7 +254,8 @@ export default class Search extends Component {
       backCloseSize,
       fontSize,
       editable,
-      keyboardType
+      keyboardType,
+      borderRadius
     } = this.props;
     return (
       <Animated.View
@@ -254,13 +267,14 @@ export default class Search extends Component {
           }
         ]}>
         {this.state.show && (
-          <View style={[styles.navWrapper, { backgroundColor }]}>
+          <View style={[{ backgroundColor, borderRadius }]} >
             {Platform.OS === 'ios' &&
-              iOSPadding && <View style={{ height: 20 }} />}
+            iOSPadding && <View style={{ height: 20 }} />}
             <View
               style={[
                 styles.nav,
-                { height: (Platform.OS === 'ios' ? 52 : 62) + heightAdjust }
+                { height: (Platform.OS === 'ios' ? 52 : 57) + heightAdjust,
+                  justifyContent: hideBack ? 'flex-start' : 'space-around' }
               ]}>
               {!hideBack && (
                 <TouchableOpacity
@@ -294,8 +308,8 @@ export default class Search extends Component {
                     fontSize: fontSize,
                     color: textColor,
                     fontFamily: fontFamily,
-                    marginLeft: hideBack ? 30 : 0,
-                    marginTop: Platform.OS === 'ios' ? heightAdjust / 2 + 10 : 0
+                    marginTop: Platform.OS === 'ios' ? heightAdjust / 2 + 10 : 0,
+                    marginLeft:13
                   }
                 ]}
                 selectionColor={selectionColor}
@@ -335,7 +349,8 @@ export default class Search extends Component {
                         hideX || this.state.input == ''
                           ? backgroundColor
                           : iconColor,
-                      padding: heightAdjust / 2 + 10
+                      padding: heightAdjust / 2 + 10,
+                      marginRight:10
                     }}
                   />
                 )}
@@ -356,20 +371,10 @@ const styles = StyleSheet.create({
     elevation: 2,
     shadowRadius: 5
   },
-  navWrapper: {
-    width: Dimensions.get('window').width
-  },
   nav: {
-    ...Platform.select({
-      android: {
-        borderBottomColor: 'lightgray',
-        borderBottomWidth: StyleSheet.hairlineWidth
-      }
-    }),
     flex: 1,
     flexBasis: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center'
   },
   input: {
