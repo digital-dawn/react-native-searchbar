@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   StyleSheet,
   Dimensions,
   Platform,
@@ -98,6 +99,7 @@ export default class Search extends Component {
     super(props);
     this.state = {
       input: '',
+      isLoading:false,
       show: props.showOnLoad,
       top: new Animated.Value(
         props.showOnLoad ? 0 : INITIAL_TOP + props.heightAdjust
@@ -108,6 +110,14 @@ export default class Search extends Component {
   getValue = () => {
     return this.state.input;
   };
+
+  showLoader = () => {
+    this.setState({isLoading:true})
+  }
+
+  hideLoader = () => {
+    this.setState({isLoading:false})
+  }
 
   show = () => {
     const { animate, animationDuration, clearOnShow } = this.props;
@@ -227,6 +237,8 @@ export default class Search extends Component {
   };
 
   render = () => {
+    let loader = this.state.isLoading ? <ActivityIndicator size="small"/> : <View style={{width:20}}/> 
+    
     const {
       placeholder,
       heightAdjust,
@@ -329,6 +341,7 @@ export default class Search extends Component {
                 keyboardAppearance={keyboardAppearance}
                 editable={editable}
               />
+             {loader}
               <TouchableOpacity
                 accessible={true}
                 accessibilityComponentType="button"
@@ -382,6 +395,6 @@ const styles = StyleSheet.create({
       ios: { height: 30 },
       android: { height: 50 }
     }),
-    width: Dimensions.get('window').width - 120
+    width: Dimensions.get('window').width - 150
   }
 });
