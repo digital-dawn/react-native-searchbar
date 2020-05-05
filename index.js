@@ -59,7 +59,8 @@ export default class Search extends Component {
     fontFamily: PropTypes.string,
     allDataOnEmptySearch: PropTypes.bool,
     editable: PropTypes.bool,
-    borderRadius: PropTypes.number
+    borderRadius: PropTypes.number,
+    loading: PropTypes.bool
   };
 
   static defaultProps = {
@@ -92,14 +93,15 @@ export default class Search extends Component {
     backCloseSize: 28,
     fontSize: 20,
     editable: true,
-    borderRadius: 0
+    borderRadius: 0,
+    loading: false
   };
 
   constructor(props) {
     super(props);
     this.state = {
       input: '',
-      isLoading:false,
+      isLoading:props.loading,
       show: props.showOnLoad,
       top: new Animated.Value(
         props.showOnLoad ? 0 : INITIAL_TOP + props.heightAdjust
