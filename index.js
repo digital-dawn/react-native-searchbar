@@ -239,7 +239,7 @@ export default class Search extends Component {
   };
 
   render = () => {
-    let loader = this.state.isLoading ? <ActivityIndicator size="small"/> : <View style={{width:20}}/> 
+    let loader = this.state.isLoading || this.props.loading ? <ActivityIndicator size="small"/> : <View style={{width:20}}/>
     
     const {
       placeholder,
